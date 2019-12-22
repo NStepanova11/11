@@ -30,5 +30,7 @@ private:
 public:
 	void FindGuideSets();
 	void ShowSet(vector<vector<string>> sets, string setName);
+	vector<vector<string>> GetPredicts();
+	Rules GetRules();
 };
 

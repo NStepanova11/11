@@ -3,18 +3,18 @@
 
 void GuideSetsGenerator::GetUniqueRuleHeads()
 {
-	cout << endl;
+	//cout << endl;
 	//список уникальных левых частей
-	cout << "unique heads: ";
+	//cout << "unique heads: ";
 	for (auto head : _rules.leftParts)
 	{
 		if (find(_uniqueRuleHeads.begin(), _uniqueRuleHeads.end(), head) == _uniqueRuleHeads.end())
 		{
 			_uniqueRuleHeads.push_back(head);
-			cout << head << " ";
+			//cout << head << " ";
 		}
 	}
-	cout << endl;
+	//cout << endl;
 }
 
 void GuideSetsGenerator::GetEmpties()
@@ -99,15 +99,16 @@ void GuideSetsGenerator::FindFirsts()
 	}	
 
 	GetUniqueSets(_firsts);
+
 	//show unique sets map
-	for (auto r : _uniqueFirstSets)
+/*	for (auto r : _uniqueFirstSets)
 	{
 		cout << r.first << " :: ";
 		for (auto e : r.second)
 			cout << e << " ";
 		cout << endl;
 	}
-
+*/
 	UpdateFirst(fstStatus);
 }
 
@@ -175,8 +176,6 @@ void GuideSetsGenerator::FindFollows()
 		flw.clear();
 	}
 
-	UpdateFollows(flwStatus);
-
 	cout << "flw status: ";
 	for (auto st : flwStatus)
 	{
@@ -184,34 +183,45 @@ void GuideSetsGenerator::FindFollows()
 	}
 	cout << endl;
 
+	UpdateFollows(flwStatus);
+
 }
 
 void GuideSetsGenerator::UpdateFollows(vector<bool>& flwStatus)
 {
 	while (find(flwStatus.begin(), flwStatus.end(), false) != flwStatus.end())
-	for (size_t pos = 0; pos < flwStatus.size(); pos++)
 	{
-		if (flwStatus[pos]==true)
+		for (size_t pos = 0; pos < flwStatus.size(); pos++)
 		{
-			for (auto i = 0; i < _follows.size(); i++)
+			if (flwStatus[pos] == true)
 			{
-				auto n_it = find(_follows[i].begin(), _follows[i].end(), _rules.leftParts[pos]);
-				if (n_it != _follows[i].end())
+				cout << "Replace " << _rules.leftParts[pos] << endl;
+				for (auto i = 0; i < _follows.size(); i++)
 				{
-					auto n_pos = distance(_follows[i].begin(), n_it);
-					_follows[i].erase(_follows[i].begin() + n_pos);
-					for (size_t k = 0; k < _follows[pos].size(); k++)
+					auto n_it = find(_follows[i].begin(), _follows[i].end(), _rules.leftParts[pos]);
+					if (n_it != _follows[i].end())
 					{
-						_follows[i].push_back(_follows[pos][k]);
+						auto n_pos = distance(_follows[i].begin(), n_it);
+						_follows[i].erase(_follows[i].begin() + n_pos);
+						for (size_t k = 0; k < _follows[pos].size(); k++)
+						{
+							_follows[i].push_back(_follows[pos][k]);
+						}
+						cout << "now flw in" << _rules.leftParts[i] << "=";
+						for (auto re : _follows[i])
+							cout << re + " ";
+						cout << endl;
+
+						if (CheckNoTerminalsInFollow(flwStatus, i))
+							flwStatus[i] = true;
 					}
-					if (CheckNoTerminalsInFollow(flwStatus, pos))
-						flwStatus[i] = true;
 				}
 			}
-		}
-		else
-		{
-			break;
+			/*else
+			{
+				break;
+			}
+			*/
 		}
 	}
 }
@@ -308,4 +318,14 @@ void GuideSetsGenerator::ShowSet(vector<vector<string>> sets, string setName)
 		}
 		cout << endl;
 	}
+}
+
+vector<vector<string>> GuideSetsGenerator::GetPredicts()
+{
+	return _predicts;
+}
+
+Rules GuideSetsGenerator::GetRules()
+{
+	return _rules;
 }

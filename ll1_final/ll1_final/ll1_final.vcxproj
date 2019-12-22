@@ -154,11 +154,17 @@
     <ClCompile Include="GrammarReader.cpp" />
     <ClCompile Include="GuideSetsGenerator.cpp" />
     <ClCompile Include="ll1_final.cpp" />
+    <ClCompile Include="ParseTable.cpp" />
+    <ClCompile Include="ParseTableRunner.cpp" />
+    <ClCompile Include="TableLL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GrammarReader.h" />
     <ClInclude Include="GuideSetsGenerator.h" />
     <ClInclude Include="Header.h" />
+    <ClInclude Include="ParseTable.h" />
+    <ClInclude Include="ParseTableRunner.h" />
+    <ClInclude Include="TableLL.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
