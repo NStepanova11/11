@@ -170,32 +170,62 @@ void GuideSetsGenerator::FindFollows()
 						}
 					}
 				}
+				//----------------------------------
+				else
+				{
+					if (_rules.rightParts[j].size()== 1)
+					{
+						flw.push_back(_rules.leftParts[j]);
+						flwStatus[i] = false;
+					}
+				}
+				//-----------------------------------
 			}
 		}
 		_follows.push_back(flw);
 		flw.clear();
 	}
 
+	/*
 	cout << "flw status: ";
 	for (auto st : flwStatus)
 	{
 		cout << st << " ";
 	}
 	cout << endl;
+	*/
+
+	cout << "---------------------------" << endl;
+	for (size_t i = 0; i < _follows.size(); i++)
+	{
+		cout << _rules.leftParts[i] << ": ";
+		for (auto n : _follows[i])
+			cout << n << " ";
+		cout << endl;
+	}
 
 	UpdateFollows(flwStatus);
 
 }
 
+
 void GuideSetsGenerator::UpdateFollows(vector<bool>& flwStatus)
 {
 	while (find(flwStatus.begin(), flwStatus.end(), false) != flwStatus.end())
 	{
+		/*
+		cout << "flw status: ";
+		for (auto st : flwStatus)
+		{
+			cout << st << " ";
+		}
+		cout << endl;
+		*/
 		for (size_t pos = 0; pos < flwStatus.size(); pos++)
 		{
 			if (flwStatus[pos] == true)
 			{
-				cout << "Replace " << _rules.leftParts[pos] << endl;
+				//cout << "Replace " << _rules.leftParts[pos] << endl;
 				for (auto i = 0; i < _follows.size(); i++)
 				{
 					auto n_it = find(_follows[i].begin(), _follows[i].end(), _rules.leftParts[pos]);
@@ -207,24 +237,25 @@ void GuideSetsGenerator::UpdateFollows(vector<bool>& flwStatus)
 						{
 							_follows[i].push_back(_follows[pos][k]);
 						}
-						cout << "now flw in" << _rules.leftParts[i] << "=";
-						for (auto re : _follows[i])
-							cout << re + " ";
-						cout << endl;
-
+						//cout << "now flw in" << _rules.leftParts[i] << "=";
+						//for (auto re : _follows[i])
+							//cout << re + " ";
+						//cout << endl;
+						
 						if (CheckNoTerminalsInFollow(flwStatus, i))
 							flwStatus[i] = true;
 					}
 				}
 			}
-			/*else
+			else
 			{
 				break;
 			}
-			*/
+			
 		}
 	}
 }
+
 
 bool GuideSetsGenerator::CheckNoTerminalsInFollow(vector<bool>& flwStatus, int pos)
 {

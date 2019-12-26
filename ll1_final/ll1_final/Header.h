@@ -40,6 +40,9 @@ struct LL {
 	int rule_num;
 };
 
-const string FILE_NAME = "grammar.txt";
-//const string FILE_NAME = "testGrammar.txt";
-//const string FILE_NAME = "g.txt";
+const int START_RULE = 2;
+const string INPUT_FILE = "input.txt";
+const string FILE_NAME = "g.txt";
+
+//const string INPUT_FILE = "newInput.txt";
+//const string FILE_NAME = "newGrammar.txt";

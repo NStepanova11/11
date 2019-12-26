@@ -1,5 +1,15 @@
 #include "ParseTableRunner.h"
 
+string ParseTableRunner::GetLexem(string& inputString)
+{
+	stringstream ss;
+	ss << inputString[0];
+	string lexem;
+	ss >> lexem;
+
+	return lexem;
+}
+
 ParseTableRunner::ParseTableRunner()
 {
 	_pt.CreateParseTable();
@@ -8,65 +18,132 @@ ParseTableRunner::ParseTableRunner()
 
 void ParseTableRunner::ShowParseTable()
 {
+	cout << "------Parse Table------" << endl;
 	_pt.ShowParseTable();
 }
 
-bool ParseTableRunner::ProcessData(string &inputString, int &cPointer, vector <int>& st)
+bool ParseTableRunner::ProcessData(string& inputString, int& cPointer, vector <int>& st)
 {
-	//невернно обрабатывается стек из-за разницы индекса (с 0) и номером строк (с 1)
-	int currPointer = cPointer - 1;
-	
-	stringstream ss;
-	ss<<inputString[0];
-	string lexem;
-	ss >> lexem;
-
-	if (find(_pTbl.at(currPointer).guideSet.begin(), _pTbl.at(currPointer).guideSet.end(), lexem) != _pTbl.at(currPointer).guideSet.end())
+	while (true)
 	{
-		if (_pTbl.at(currPointer).value != "#")
-			cPointer = _pTbl.at(currPointer).go_to;
-		else
+		/*
+		cout << cPointer <<")  " << inputString << "  ST: [";
+		if (st.empty() == false)
 		{
-			cPointer = st[st.size() - 1];
-			st.pop_back();
+			for (auto e : st)
+				cout << e << " ";
 		}
+		*/
 
-		if (cPointer == NULL)
-		{
-			cPointer = st[st.size() - 1];
-			st.pop_back();
-		}
-	}
-	
-	else
-	{
-		if (_pTbl.at(currPointer).err == true)
-			return false;
-		else
-			cPointer = _pTbl.at(currPointer).next_alt;
-	}
-			
-	if (_pTbl.at(currPointer).shift == true)
-	{
-		inputString.erase(inputString.begin());
+			int currPointer = cPointer - 1;
 
-		if (inputString.size() == 0)
-		{
-			if (_pTbl.at(currPointer).final == true)
+			stringstream ss;
+			ss << inputString[0];
+			string lexem;
+			ss >> lexem;
+
+			if (_pTbl.at(currPointer).final == true && st.empty() == true && lexem == "$")
 				return true;
-		}
+			else
+			{
+				auto it = find(_pTbl.at(currPointer).guideSet.begin(), _pTbl.at(currPointer).guideSet.end(), lexem);
+				if (it != _pTbl.at(currPointer).guideSet.end())
+				{
+					cPointer = _pTbl.at(currPointer).go_to;
+					if (cPointer == NULL)
+					{
+						if (st.empty() == false)
+						{
+							cPointer = st[st.size() - 1];
+							st.pop_back();
+						}
+						else
+							return false;
+					}
+					//cout << "]  Go to: " << cPointer;
+					//cout << endl;
+					if (_pTbl.at(currPointer).shift == true)
+					{
+						if (inputString.size() != 0)
+						{
+							inputString.erase(inputString.begin());
+						}
+					}
 
+					if (_pTbl.at(currPointer).to_stack == true)
+						st.push_back(currPointer + 2);
+				}
+				else
+				{
+					if (_pTbl.at(currPointer).err == false)
+						cPointer = _pTbl.at(currPointer).next_alt;
+					else return false;
+				}
+
+			}
 	}
-
-	if (_pTbl.at(currPointer).to_stack == true)
-		st.push_back(currPointer+1);
-		
-	cout << "STACK : ";
-	for (auto e : st)
-		cout << e << ",";
-	cout << endl;
-
-	ProcessData(inputString, cPointer, st);
-
-	return false;
 }
+
+/*
+bool ParseTableRunner::ProcessData(string& inputString, int& cPointer, vector <int>& st)
+{
+	while (true)
+	{
+
+		cout << " STR: " << inputString<< " CUR Pointer: " << cPointer << " STACK IS: ";
+		if (st.empty() == false)
+		{
+			for (auto e : st)
+				cout << e << ", ";
+		}
+		cout << endl;
+		
+		
+		int currPointer = cPointer - 1;
+
+		stringstream ss;
+		ss << inputString[0];
+		string lexem;
+		ss >> lexem;
+
+		if (_pTbl.at(currPointer).final == true && st.empty() == true && lexem == "$")
+			return true;
+		else
+		{
+			auto it = find(_pTbl.at(currPointer).guideSet.begin(), _pTbl.at(currPointer).guideSet.end(), lexem);
+			if (it != _pTbl.at(currPointer).guideSet.end())
+			{
+				cPointer = _pTbl.at(currPointer).go_to;
+				if (cPointer == NULL)
+				{
+					if (st.empty() == false)
+					{
+						cPointer = st[st.size() - 1];
+						st.pop_back();
+					}
+					else
+						return false;
+				}
+
+				if (_pTbl.at(currPointer).shift == true)
+				{
+					if (inputString.size() != 0)
+					{
+						inputString.erase(inputString.begin());
+					}
+				}
+
+				if (_pTbl.at(currPointer).to_stack == true)
+					st.push_back(currPointer + 2);
+			}
+			else
+			{
+				if (_pTbl.at(currPointer).err == false)
+					cPointer = _pTbl.at(currPointer).next_alt;
+				else return false;
+			}
+
+		}
+	}
+}
+*/

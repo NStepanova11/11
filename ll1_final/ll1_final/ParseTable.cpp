@@ -95,7 +95,14 @@ void ParseTable::CreateShiftColumn(ParseLine& pl, int i)
 
 void ParseTable::CreateFinalColumn(ParseLine& pl, int i)
 {
+	/*
 	if (find(pl.guideSet.begin(), pl.guideSet.end(), "$") != pl.guideSet.end())
+		pl.final = true;
+	else
+		pl.final = false;
+	*/
+
+	if (pl.value == "$")
 		pl.final = true;
 	else
 		pl.final = false;
@@ -134,7 +141,10 @@ void ParseTable::ShowParseTable()
 
 		string gs;
 		for (auto e : line.guideSet)
-			gs.append(e + " ");
+		{
+			if (e!="$")
+				gs.append(e + " ");
+		}
 		cout << setw(10) << left << gs;
 		cout << setw(8) << left << boolalpha << line.shift;
 		cout << setw(5) << left << line.go_to;

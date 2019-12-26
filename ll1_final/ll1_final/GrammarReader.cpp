@@ -19,7 +19,7 @@ void GrammarReader::ReadGrammarFromFile()
 		ss >> leftNonTerminal;
 
 		//стартовый нетерминал должен находиться в первой строке в файле
-		if (lineNum == 1)
+		if (lineNum == START_RULE)
 			rules.startNoTerminal = leftNonTerminal;
 
 		rules.leftParts.push_back(leftNonTerminal);

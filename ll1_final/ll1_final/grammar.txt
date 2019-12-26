@@ -1,5 +1,6 @@
+S -> E $
 E -> T R
 R -> + T R | #
 T -> F Y
 Y -> * F Y | #
-F -> n | ( E )
+F -> n | ( E ) | - F

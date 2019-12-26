@@ -7,6 +7,7 @@ class ParseTableRunner
 private: 
 	ParseTable _pt;
 	vector<ParseLine> _pTbl;
+	string GetLexem(string& inputString);
 public:
 	ParseTableRunner();
 	void ShowParseTable();

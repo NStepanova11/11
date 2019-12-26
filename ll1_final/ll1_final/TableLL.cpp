@@ -11,7 +11,7 @@ void TableLL::CreateTable()
 {
 	GetUniqueHeads();
 	GetUniquePredicts();
-	cout << "\n\n";
+	//cout << "\n\n";
 	
 	for (auto e : _uniqueHeads)
 	{
@@ -25,7 +25,7 @@ void TableLL::CreateTable()
 		LL ll_head;
 
 		n++;
-		cout << setw(4) << left << n << setw(4) << left << _rules.leftParts[i];
+		//cout << setw(4) << left << n << setw(4) << left << _rules.leftParts[i];
 
 		string guideSetString;
 		for (size_t p = 0; p < _predicts[i].size(); p++)
@@ -33,8 +33,8 @@ void TableLL::CreateTable()
 			guideSetString.append(_predicts[i][p]+" ");
 			ll_head.set.push_back(_predicts[i][p]);
 		}
-		cout << setw(10) << left << guideSetString;
-		cout << setw(4) << right << n + 1 << endl;
+		//cout << setw(10) << left << guideSetString;
+		//cout << setw(4) << right << n + 1 << endl;
 
 		ll_head.value = _rules.leftParts[i];
 		ll_head.is_left = true;
@@ -54,7 +54,7 @@ void TableLL::CreateTable()
 
 			n++;
 			string lexem = _rules.rightParts[i][j];
-			cout << setw(4) << left << n << setw(4) << left << lexem;
+			//cout << setw(4) << left << n << setw(4) << left << lexem;
 			string guideSet;
 
 			int go_to = n + 1;
@@ -83,7 +83,7 @@ void TableLL::CreateTable()
 				}
 				else if (lexem != "#")
 				{		
-					cout << " J= " << j << " SIZE-1 = " << _rules.rightParts[i].size() - 1 << endl;
+					//cout << " J= " << j << " SIZE-1 = " << _rules.rightParts[i].size() - 1 << endl;
 					if (j == _rules.rightParts[i].size() - 1)
 						ll_body.go_to = NULL;
 					else
@@ -92,8 +92,8 @@ void TableLL::CreateTable()
 				}
 			}
 			
-			cout << setw(10) << left << guideSet;
-			cout << setw(4) << right << go_to << endl;
+			//cout << setw(10) << left << guideSet;
+			//cout << setw(4) << right << go_to << endl;
 
 			ll_body.value = lexem;
 			ll_body.is_left = false;
@@ -101,10 +101,11 @@ void TableLL::CreateTable()
 			ll_tbl.push_back(ll_body);
 
 		}
-		cout << "-------------------------------" << endl;
+		//cout << "-------------------------------" << endl;
 	}
 	
-	cout << endl;
+	//индексы в таблице, где начинаются альтернативы правил
+	/*cout << endl;
 	for (auto i:idx_of_rules)
 	{
 		cout << i.first << " : ";
@@ -113,6 +114,7 @@ void TableLL::CreateTable()
 		cout << endl;
 	}
 	cout << endl;
+	*/
 	cout << endl;
 	UpdateEmptyIdx();
 	ShowLLTable();
@@ -120,6 +122,7 @@ void TableLL::CreateTable()
 
 void TableLL::ShowLLTable()
 {
+	cout << "------LL(1) table------" << endl;
 	int n = 1;
 	for (auto l : ll_tbl)
 	{
@@ -134,7 +137,6 @@ void TableLL::ShowLLTable()
 		cout << setw(4) << left << l.go_to;
 		cout << setw(6) << left << boolalpha <<l.is_left;
 		cout << setw(4) << right << l.rule_num << endl;
-
 		n++;
 	}
 }
@@ -187,7 +189,7 @@ void TableLL::GetUniqueHeads()
 
 void TableLL::ShowUnique()
 {
-	cout << "\n\n";
+	//cout << "\n\n";
 	for (auto r : _uniquePredicts)
 	{
 		cout << r.first<<": ";
